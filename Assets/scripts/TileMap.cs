@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[ExecuteInEditMode]
+//[ExecuteInEditMode]
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
 [RequireComponent(typeof(MeshCollider))]
@@ -12,8 +12,11 @@ public class TileMap : MonoBehaviour {
 	private MeshCollider mCol;
 
 	// Number of tiles
+	[SerializeField]
 	private int size_x = 100;
+	[SerializeField]
 	private int size_z = 50;
+	[SerializeField]
 	private float tileSize = 1;
 
 	private void Start () {
@@ -24,7 +27,7 @@ public class TileMap : MonoBehaviour {
 		BuildMesh ();
 	}
 
-	private void BuildMesh () {
+	public void BuildMesh () {
 
 		int numTiles = size_x * size_z;
 		int vsize_x = size_x + 1;
