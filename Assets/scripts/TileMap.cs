@@ -16,8 +16,8 @@ public class TileMap : MonoBehaviour {
 	private int size_x = 100;
 	[SerializeField]
 	private int size_z = 50;
-	[SerializeField]
-	private float tileSize = 1;
+
+	public float tileSize = 1;
 
 	private void Start () {
 		mFil = GetComponent<MeshFilter> ();
@@ -80,5 +80,6 @@ public class TileMap : MonoBehaviour {
 		mesh.uv = uv;
 
 		mFil.mesh = mesh;
+		mCol.sharedMesh = mesh;
 	}
 }
