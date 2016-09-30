@@ -16,8 +16,10 @@ public class TileMap : MonoBehaviour {
 	private int size_x = 100;
 	[SerializeField]
 	private int size_z = 50;
+	private int tileResolution = 8;
 
 	public float tileSize = 1;
+
 
 	private void Start () {
 		mFil = GetComponent<MeshFilter> ();
@@ -50,7 +52,7 @@ public class TileMap : MonoBehaviour {
 
 				vertices [z * vsize_x + x] = new Vector3 (x * tileSize, 0, z * tileSize);
 				normals [z * vsize_x + x] = Vector3.up;
-				uv [z * vsize_x + x] = new Vector2 ((float)x / vsize_x, (float)z / vsize_z);
+				uv [z * vsize_x + x] = new Vector2 ((float)x / size_x, (float)z / size_z);
 			}
 		}
 
@@ -81,5 +83,29 @@ public class TileMap : MonoBehaviour {
 
 		mFil.mesh = mesh;
 		mCol.sharedMesh = mesh;
+
+		BuildTexture ();
+	}
+
+	private void BuildTexture () {
+
+		int texWidth = 10;
+		int texHeight = 10;
+
+		Texture2D texture = new Texture2D (texWidth, texHeight); // (size_x * tileResolution, size_z * tileResolution);
+
+		for (int y = 0; y < texWidth; y++) {
+			for (int x = 0; x < texHeight; x++) {
+				Color c = new Color (Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
+				texture.SetPixel (x, y, c);
+			}
+		}
+
+		texture.filterMode = FilterMode.Point;
+		texture.wrapMode = TextureWrapMode.Clamp;
+		texture.Apply ();
+
+		mRen.sharedMaterial.mainTexture = texture;
+
 	}
 }
