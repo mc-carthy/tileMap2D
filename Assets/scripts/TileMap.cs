@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-//[ExecuteInEditMode]
+[ExecuteInEditMode]
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
 [RequireComponent(typeof(MeshCollider))]
@@ -10,13 +10,15 @@ public class TileMap : MonoBehaviour {
 	private MeshFilter mFil;
 	private MeshRenderer mRen;
 	private MeshCollider mCol;
+	[SerializeField]
+	private Texture2D terrainTiles;
 
 	// Number of tiles
 	[SerializeField]
 	private int size_x = 100;
 	[SerializeField]
 	private int size_z = 50;
-	private int tileResolution = 8;
+	private int tileResolution;
 
 	public float tileSize = 1;
 
@@ -88,16 +90,19 @@ public class TileMap : MonoBehaviour {
 	}
 
 	private void BuildTexture () {
+		tileResolution = terrainTiles.height; // Move this
 
-		int texWidth = 10;
-		int texHeight = 10;
+		int texWidth = size_x * tileResolution;
+		int texHeight = size_z * tileResolution;
+		Texture2D texture = new Texture2D (texWidth, texHeight);
 
-		Texture2D texture = new Texture2D (texWidth, texHeight); // (size_x * tileResolution, size_z * tileResolution);
+		Color[][] tiles = ChopUpTiles ();
 
-		for (int y = 0; y < texWidth; y++) {
-			for (int x = 0; x < texHeight; x++) {
-				Color c = new Color (Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
-				texture.SetPixel (x, y, c);
+		for (int y = 0; y < size_z; y++) {
+			for (int x = 0; x < size_x; x++) {
+				int terrainTileOffset = Random.Range (0, 4) * tileResolution;
+				Color[] p = tiles[Random.Range(0,4)];
+				texture.SetPixels (x * tileResolution, y * tileResolution, tileResolution, tileResolution, p);
 			}
 		}
 
@@ -107,5 +112,20 @@ public class TileMap : MonoBehaviour {
 
 		mRen.sharedMaterial.mainTexture = texture;
 
+	}
+
+	private Color[][] ChopUpTiles () {
+		int numTilesPerRow = terrainTiles.width / tileResolution;
+		int numRows = terrainTiles.height / tileResolution;
+
+		Color[][] tiles = new Color[numTilesPerRow * numRows][];
+
+		for (int y = 0; y < numRows; y++) {
+			for (int x = 0; x < numTilesPerRow; x++) {
+				tiles [y * numTilesPerRow + x] = terrainTiles.GetPixels (x * tileResolution, y * tileResolution, tileResolution, tileResolution);
+			}
+		}
+
+		return tiles;
 	}
 }
