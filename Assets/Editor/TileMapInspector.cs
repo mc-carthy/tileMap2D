@@ -2,14 +2,14 @@
 using UnityEngine;
 using System.Collections;
 
-[CustomEditor(typeof(TileMap))]
+[CustomEditor(typeof(TileGraphicsMap))]
 public class TileMapInspector : Editor {
 
 	public override void OnInspectorGUI () {
 		base.OnInspectorGUI();
 
 		if (GUILayout.Button("Regenerate")) {
-			TileMap tileMap = (TileMap)target;
+			TileGraphicsMap tileMap = (TileGraphicsMap)target;
 			tileMap.BuildMesh ();
 		}
 	}

@@ -1,11 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[ExecuteInEditMode]
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
 [RequireComponent(typeof(MeshCollider))]
-public class TileMap : MonoBehaviour {
+public class TileGraphicsMap : MonoBehaviour {
 
 	private MeshFilter mFil;
 	private MeshRenderer mRen;
@@ -83,13 +82,15 @@ public class TileMap : MonoBehaviour {
 		mesh.normals = normals;
 		mesh.uv = uv;
 
+		BuildTexture ();
+
 		mFil.mesh = mesh;
 		mCol.sharedMesh = mesh;
-
-		BuildTexture ();
 	}
 
-	private void BuildTexture () {
+	public void BuildTexture () {
+		TileDataMap map = new TileDataMap(size_x, size_z);
+
 		tileResolution = terrainTiles.height; // Move this
 
 		int texWidth = size_x * tileResolution;
@@ -100,8 +101,7 @@ public class TileMap : MonoBehaviour {
 
 		for (int y = 0; y < size_z; y++) {
 			for (int x = 0; x < size_x; x++) {
-				int terrainTileOffset = Random.Range (0, 4) * tileResolution;
-				Color[] p = tiles[Random.Range(0,4)];
+				Color[] p = tiles[map.GetTileAt(x, y)];
 				texture.SetPixels (x * tileResolution, y * tileResolution, tileResolution, tileResolution, p);
 			}
 		}
