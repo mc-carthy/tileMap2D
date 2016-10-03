@@ -138,6 +138,17 @@ public class TileDataMap {
 		int x = r1.centerX;
 		int y = r1.centerY;
 
+		while (x != r2.centerX) {
+			map_data [x, y] = 1;
+			x += x < r2.centerX ? 1 : -1;
+		}
+
+		while (y != r2.centerY) {
+			map_data [x, y] = 1;
+			y += y < r2.centerY ? 1 : -1;
+		}
+
+		/*
 		while (x != r2.centerX || y != r2.centerY) {
 			map_data [x, y] = 1;
 			if (Mathf.Abs (x - r2.centerX) > Mathf.Abs (y - r2.centerY)) {
@@ -146,5 +157,6 @@ public class TileDataMap {
 				y += y < r2.centerY ? 1 : -1;
 			}
 		}
+		*/
 	}
 }
