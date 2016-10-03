@@ -82,7 +82,7 @@ public class TileDataMap {
 		}
 
 		rooms = new List<DataRoom> ();
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < 10; i++) {
 			int rsx = Random.Range (4, 14);
 			int rsy = Random.Range (4, 10);
 
@@ -186,6 +186,21 @@ public class TileDataMap {
 			return true;
 		}
 		if (y < size_y - 1 && map_data [x, y + 1] == 1) {
+			return true;
+		}
+
+
+
+		if (x > 0 && y > 0 && map_data [x - 1, y - 1] == 1) {
+			return true;
+		}
+		if (x < size_x - 1 && y > 0 && map_data [x + 1, y - 1] == 1) {
+			return true;
+		}
+		if (x < size_x - 1 && y < size_y - 1 && map_data [x + 1, y + 1] == 1) {
+			return true;
+		}
+		if (x > 0 && y < size_y - 1 && map_data [x - 1, y + 1] == 1) {
 			return true;
 		}
 
