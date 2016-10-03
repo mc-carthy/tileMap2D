@@ -21,6 +21,18 @@ public class TileDataMap {
 			}
 		}
 
+		public int centerX {
+			get {
+				return left + (width / 2);
+			}
+		}
+
+		public int centerY {
+			get {
+				return bottom + (height / 2);
+			}
+		}
+
 		public bool CollidesWith (DataRoom other) {
 			if (left > other.right) {
 				return false;
@@ -46,18 +58,22 @@ public class TileDataMap {
 	private int size_y;
 	private int[,] map_data;
 
-	List<DataRoom> rooms;
+	private List<DataRoom> rooms;
 
 	// 0 - Unkown
 	// 1 - Floor
 	// 2 - Wall
 	// 3 - Stone
 
+	[SerializeField]
+	private int roomNum = 10;
+
 	public TileDataMap(int size_x, int size_y) {
 		this.size_x = size_x;
 		this.size_y = size_y;
 
 		map_data = new int [size_x, size_y];
+
 
 		for (int x = 0; x < size_x; x++) {
 			for (int y = 0; y < size_y; y++) {
@@ -67,7 +83,7 @@ public class TileDataMap {
 
 		rooms = new List<DataRoom> ();
 
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < roomNum; i++) {
 			int rsx = Random.Range (4, 8);
 			int rsy = Random.Range (4, 8);
 
@@ -79,12 +95,15 @@ public class TileDataMap {
 
 			if (!DoesRoomCollide (r)) {
 				rooms.Add (r);
-
-				MakeRoom (r);
 			} else {
 				i--;
 			}
+
+			foreach (DataRoom r2 in rooms) {
+				BuildRoom (r2);
+			}
 		}
+		BuildCorridor (rooms [0], rooms [1]);
 
 	}
 
@@ -92,7 +111,7 @@ public class TileDataMap {
 		return map_data [x, y];
 	}
 
-	private void MakeRoom (DataRoom r) {
+	private void BuildRoom (DataRoom r) {
 
 		for (int x = 0; x < r.width; x++) {
 			for (int y = 0; y < r.height; y++) {
@@ -113,5 +132,19 @@ public class TileDataMap {
 			}
 		}
 		return false;
+	}
+
+	private void BuildCorridor (DataRoom r1, DataRoom r2) {
+		int x = r1.centerX;
+		int y = r1.centerY;
+
+		while (x != r2.centerX || y != r2.centerY) {
+			map_data [x, y] = 1;
+			if (Mathf.Abs (x - r2.centerX) > Mathf.Abs (y - r2.centerY)) {
+				x += x < r2.centerX ? 1 : -1;
+			} else {
+				y += y < r2.centerY ? 1 : -1;
+			}
+		}
 	}
 }

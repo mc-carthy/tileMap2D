@@ -53,7 +53,7 @@ public class TileGraphicsMap : MonoBehaviour {
 
 				vertices [z * vsize_x + x] = new Vector3 (x * tileSize, 0, z * tileSize);
 				normals [z * vsize_x + x] = Vector3.up;
-				uv [z * vsize_x + x] = new Vector2 ((float)x / size_x, (float)z / size_z);
+				uv [z * vsize_x + x] = new Vector2 ((float)x / size_x, 1 - (float)z / size_z);
 			}
 		}
 
