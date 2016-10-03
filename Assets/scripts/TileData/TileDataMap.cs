@@ -9,6 +9,8 @@ public class TileDataMap {
 		public int width; 
 		public int height;
 
+		public bool isConnected = false;
+
 		public int right {
 			get {
 				return left + width - 1;
@@ -57,6 +59,7 @@ public class TileDataMap {
 	private int size_x;
 	private int size_y;
 	private int[,] map_data;
+	private int roomNum = 10;
 
 	private List<DataRoom> rooms;
 
@@ -64,9 +67,6 @@ public class TileDataMap {
 	// 1 - Floor
 	// 2 - Wall
 	// 3 - Stone
-
-	[SerializeField]
-	private int roomNum = 10;
 
 	public TileDataMap(int size_x, int size_y) {
 		this.size_x = size_x;
@@ -82,29 +82,38 @@ public class TileDataMap {
 		}
 
 		rooms = new List<DataRoom> ();
-
-		for (int i = 0; i < roomNum; i++) {
-			int rsx = Random.Range (4, 8);
-			int rsy = Random.Range (4, 8);
+		for (int i = 0; i < 4; i++) {
+			int rsx = Random.Range (4, 14);
+			int rsy = Random.Range (4, 10);
 
 			DataRoom r = new DataRoom ();
+
 			r.left = Random.Range (0, size_x - rsx);
 			r.bottom = Random.Range (0, size_y - rsy);
 			r.width = rsx;
 			r.height = rsy;
+
+
+			//Debug.Log (!DoesRoomCollide(r));
+
 
 			if (!DoesRoomCollide (r)) {
 				rooms.Add (r);
 			} else {
 				i--;
 			}
+		}
 
-			foreach (DataRoom r2 in rooms) {
-				BuildRoom (r2);
+		foreach (DataRoom room in rooms) {
+			BuildRoom (room);
+		}
+
+		for (int i = 0; i < rooms.Count; i++) {
+			if (!rooms[i].isConnected) {
+				int j = Random.Range (1, rooms.Count);
+				BuildCorridor (rooms[i], rooms [(i + j) % rooms.Count]);
 			}
 		}
-		BuildCorridor (rooms [0], rooms [1]);
-
 	}
 
 	public int GetTileAt(int x, int y) {
@@ -148,15 +157,7 @@ public class TileDataMap {
 			y += y < r2.centerY ? 1 : -1;
 		}
 
-		/*
-		while (x != r2.centerX || y != r2.centerY) {
-			map_data [x, y] = 1;
-			if (Mathf.Abs (x - r2.centerX) > Mathf.Abs (y - r2.centerY)) {
-				x += x < r2.centerX ? 1 : -1;
-			} else {
-				y += y < r2.centerY ? 1 : -1;
-			}
-		}
-		*/
+		r1.isConnected = true;
+		r2.isConnected = true;
 	}
 }

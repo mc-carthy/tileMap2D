@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+//[ExecuteInEditMode]
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
 [RequireComponent(typeof(MeshCollider))]

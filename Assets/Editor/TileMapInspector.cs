@@ -5,6 +5,7 @@ using System.Collections;
 [CustomEditor(typeof(TileGraphicsMap))]
 public class TileMapInspector : Editor {
 
+
 	public override void OnInspectorGUI () {
 		base.OnInspectorGUI();
 
