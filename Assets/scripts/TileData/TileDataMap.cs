@@ -114,6 +114,8 @@ public class TileDataMap {
 				BuildCorridor (rooms[i], rooms [(i + j) % rooms.Count]);
 			}
 		}
+
+		BuildWalls ();
 	}
 
 	public int GetTileAt(int x, int y) {
@@ -159,5 +161,34 @@ public class TileDataMap {
 
 		r1.isConnected = true;
 		r2.isConnected = true;
+	}
+
+	private void BuildWalls () {
+		for (int x = 0; x < size_x; x++) {
+			for (int y = 0; y < size_y; y++) {
+				if (map_data[x, y] == 3 && HasAdjacentFloor (x, y)) {
+					map_data [x, y] = 2;
+				}
+			}
+		}
+	}
+
+	private bool HasAdjacentFloor (int x, int y) {
+
+		if (x > 0 && map_data [x - 1, y] == 1) {
+			return true;
+		}
+		if (x < size_x - 1 && map_data [x + 1, y] == 1) {
+			return true;
+		}
+
+		if (y > 0 && map_data [x, y - 1] == 1) {
+			return true;
+		}
+		if (y < size_y - 1 && map_data [x, y + 1] == 1) {
+			return true;
+		}
+
+		return false;
 	}
 }
